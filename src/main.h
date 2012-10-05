@@ -12,8 +12,8 @@
 "\tThis is a program which prints true table according to the given expression.\n" \
 "\n" \
 "\t`!`: not\n" \
-"\t`&`: and\n" \
-"\t`|`: or\n" \
+"\t`^`: and\n" \
+"\t`v`: or\n" \
 "\t`>`: implication\n" \
 "\t`#`: double implication\n" \
 "\t`A-Z`: element\n" \

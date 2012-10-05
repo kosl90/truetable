@@ -3,22 +3,18 @@ all: debug
 TARGET=truetable.exe
 CC=gcc
 STD=c99
-INCLUDE=include
 LIBDIR=.
 LIB=tt
 CFLAGS=-std=$(STD) -L$(LIBDIR) -l$(LIB)
 
-truetable: main.c
+$(TARGET): main.c
 	$(CC) -o $(TARGET) $@ $(CFLAGS)
 
-debug: main.c
-	$(CC) -g -o $(TARGET) $@ $(CFLAGS)
-
-lib: stack.o bstrlib.o
+libtt.a: stack.o bstrlib.o
 	ar rvs libtt.a $@
 
 
-.PHONY: clean dist-clean
+.PHONY: clean distclean
 clean:
 	rm -rf a.out *.~ *.swp *.o
 

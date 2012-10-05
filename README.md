@@ -7,8 +7,8 @@ truetable -v|--version
 This is a program which prints true table according to the given expression.
 
 `!`: not
-`&`: and
-`|`: or
+`^`: and
+`v`: or
 `>`: implication
 `#`: double implication
 `A-Z`: element
