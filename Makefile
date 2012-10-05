@@ -6,6 +6,7 @@ STD=c99
 LIBDIR=.
 LIB=tt
 CFLAGS=-std=$(STD) -L$(LIBDIR) -l$(LIB)
+VPATH=src
 
 $(TARGET): main.c
 	$(CC) -o $(TARGET) $@ $(CFLAGS)
