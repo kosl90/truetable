@@ -6,7 +6,6 @@
 #include "bstrlib.h"
 
 bool is_valid(const bstring);
- eval();
 void print(const bstring, );
 
 int main(int argc, char* argv[])
@@ -20,13 +19,13 @@ int main(int argc, char* argv[])
         fprintf(stderr, HELP_INFO);
     } else if (strcmp(argv[1], "-e") == 0) {
         bstring expr = NULL;
-        expr = fromcstr(argv[1]);
+        expr = bfromcstr(argv[1]);
 
         if (!is_valid(expr)) {
             return 1;
         }
 
-        info = parse(expr);
+        parse(expr);
         result = eval(expr);
 
         print(expr, info, result);

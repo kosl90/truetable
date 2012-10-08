@@ -1,5 +1,3 @@
-all: debug
-
 TARGET=truetable.exe
 CC=gcc
 STD=c99
@@ -8,12 +6,17 @@ LIB=tt
 CFLAGS=-std=$(STD) -L$(LIBDIR) -l$(LIB)
 VPATH=src
 
+all: debug
+
 $(TARGET): main.c
 	$(CC) -o $(TARGET) $@ $(CFLAGS)
 
-libtt.a: stack.o bstrlib.o
+libtt.a: build stack.o bstrlib.o
 	ar rvs libtt.a $@
 
+build:
+	mkdir -p build
+	mkdir -p bin
 
 .PHONY: clean distclean
 clean:

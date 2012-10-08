@@ -34,4 +34,9 @@
 "NOTE:\n" \
 "\tif no option is given, program will read expression from standard input.\n\n" \
 
+struct expr_info {
+    int element_num;
+    bool val[26];
+};
+
 #endif /* end of include guard: _MAIN_H_ */
