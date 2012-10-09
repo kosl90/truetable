@@ -1,18 +1,22 @@
-TARGET=truetable.exe
+TARGET=build/libtt.a
 CC=gcc
 STD=c99
-LIBDIR=.
+LIBDIR=build
 LIB=tt
-CFLAGS=-std=$(STD) -L$(LIBDIR) -l$(LIB)
-VPATH=src
+INCLUDE=src
+CFLAGS=-std=$(STD) -I$(INCLUDE) -Wall -Wextra -rdynamic -static -g -O2 -DNODEBUG
 
-all: debug
+SOURCES=$(wildcard src/*.c)
+OBJECTS=$(patsubst %.c, %.o, $(SOURCES))
 
-$(TARGET): main.c
-	$(CC) -o $(TARGET) $@ $(CFLAGS)
+TESTS_SOURCES=$(wildcard tests/*.c)
+TESTS=$(patsubst %.c, %, $(TESTS_SOURCES))
 
-libtt.a: build stack.o bstrlib.o
-	ar rvs libtt.a $@
+all: $(TARGET)
+
+$(TARGET): build $(OBJECTS)
+	ar rvs $@ $(OBJECTS)
+	ranlib $@
 
 build:
 	mkdir -p build
@@ -20,7 +24,15 @@ build:
 
 .PHONY: clean distclean
 clean:
-	rm -rf a.out *.~ *.swp *.o
+	cd src/; rm -rf a.out *.~ *.swp *.o
+	rm -rf build/
 
 distclean: clean
-	rm -rf *.a
+	cd src/; rm -rf *.a
+
+.PHONY: tests
+#tests: CFLAGS += $(TARGET)
+tests: $(TESTS)
+
+tests/test_infix2suffix: tests/test_infix2suffix.c $(OBJECTS)
+	gcc $(CFLAGS) -o tests/test_infix2suffix tests/test_infix2suffix.c $(OBJECTS)

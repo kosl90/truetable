@@ -1,12 +1,13 @@
 #include <ctype.h>
 #include "eval.h"
+#include "rela.h"
 #include "stack.h"
 #include "bstrlib.h"
 #include "dbg.h"
 
 bstring infix2suffix(const_bstring expr)
 {
-    bstring suffix;
+    bstring suffix = bfromcstr("");
     StackNode* stack = NULL;
     char c;
     size_t idx = 0;
@@ -15,17 +16,20 @@ bstring infix2suffix(const_bstring expr)
         if (isupper(c)) {
             bconchar(suffix, c);
         } else if (is_empty(stack)) {
-                push(&stack, c);
-                continue;
+            push(&stack, c);
         } else if (c == '('){
-            push(&stack, c_expr[idx]);
+            push(&stack, c);
+            printf("%c\n", top(stack));
         } else if (c == ')') {
-            while (!is_empty(stack) && top(stack) != '(') {
+            while (/*!is_empty(stack) && */top(stack) != '(') {
                 bconchar(suffix, top(stack));
                 pop(&stack);
             }
+
+            /*if (!is_empty(stack) && top(stack) == '(')*/
+            /*pop(&stack);*/
         } else if (is_operator(c)) {
-            Priority pri = priority(c);
+            rel_priority pri = priority(c);
 
             /*
              * when stack is not empty, and the priority of top element in stack

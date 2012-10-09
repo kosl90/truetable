@@ -7,7 +7,7 @@
  *
  * @return - bool, false if e is true else true
  */
-inline bool not(bool e)
+bool not(bool e)
 {
     return !e;
 }
@@ -21,7 +21,7 @@ inline bool not(bool e)
  *
  * @return - bool, true only if both lhs and rhs are true else false
  */
-inline bool and(bool lhs, bool rhs)
+bool and(bool lhs, bool rhs)
 {
     return lhs & rhs;
 }
@@ -35,7 +35,7 @@ inline bool and(bool lhs, bool rhs)
  *
  * @return - bool, false only if both lhs and rhs are false else true
  */
-inline bool or(bool lhs, bool rhs)
+bool or(bool lhs, bool rhs)
 {
     return lhs | rhs;
 }
@@ -49,7 +49,7 @@ inline bool or(bool lhs, bool rhs)
  *
  * @return - bool, return false only if lhs is true and rhs is false else true
  */
-inline bool imply(bool lhs, bool rhs)
+bool imply(bool lhs, bool rhs)
 {
     return or(not(lhs), rhs);
 }
@@ -63,7 +63,7 @@ inline bool imply(bool lhs, bool rhs)
  *
  * @return - bool, true only if both lhs and rhs are true or false else false
  */
-inline bool equal(bool lhs, bool rhs)
+bool equal(bool lhs, bool rhs)
 {
     return and(imply(lhs, rhs), imply(rhs, lhs));
 }
@@ -76,7 +76,7 @@ inline bool equal(bool lhs, bool rhs)
  *
  * @return - rel_priority, the priority of corresponding operator, otherwise UNKNOWN
  */
-inline rel_priority priority(const char opr)
+rel_priority priority(const char opr)
 {
     switch (opr) {
         case '!':
@@ -94,4 +94,11 @@ inline rel_priority priority(const char opr)
     }
 }
 
-#endif /* end of include guard: _RELATION_H_ */
+bool is_operator(const char opr)
+{
+    return opr == '^' || opr == 'v'
+        || opr == '>' || opr == '#'
+        || opr == '!' || opr == '('
+        || opr == ')';
+}
+

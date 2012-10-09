@@ -1,6 +1,8 @@
 #ifndef _MAIN_H_
 #define _MAIN_H_
 
+#include <stdbool.h>
+
 #define VERSION "2.0"
 #define HELP_INFO \
 "USAGE:\n" \

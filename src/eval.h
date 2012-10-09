@@ -8,4 +8,6 @@ int parse(const bstring);
 
 int** eval(const bstring expr, const struct expr_info info);
 
+bstring infix2suffix(const_bstring);
+
 #endif /* end of include guard: _EVAL_H_ */

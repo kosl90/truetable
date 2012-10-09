@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 typedef enum {
-    UNKNOWN, NOT, CONJUNTION, DISJUNTION,
+    UNKNOWN, NOT, CONJUNCTION, DISJUNCTION,
     IMPLICATION, EQUALITY
 } rel_priority;
 
@@ -16,7 +16,7 @@ typedef enum {
  *
  * @return - bool, false if e is true else true
  */
-inline bool not(bool e);
+bool not(bool e);
 
 /**
  * @brief and - return the conjunction value of lhs and rhs
@@ -26,7 +26,7 @@ inline bool not(bool e);
  *
  * @return - bool, true only if both lhs and rhs are true else false
  */
-inline bool and(bool lhs, bool rhs);
+bool and(bool lhs, bool rhs);
 
 /**
  * @brief or - return the truth value of disjunction
@@ -36,7 +36,7 @@ inline bool and(bool lhs, bool rhs);
  *
  * @return - bool, false only if both lhs and rhs are false else true
  */
-inline bool or(bool lhs, bool rhs);
+bool or(bool lhs, bool rhs);
 
 /**
  * @brief imply - return the truth value of implication
@@ -46,7 +46,7 @@ inline bool or(bool lhs, bool rhs);
  *
  * @return - bool, return false only if lhs is true and rhs is false else true
  */
-inline bool imply(bool lhs, bool rhs);
+bool imply(bool lhs, bool rhs);
 
 
 /**
@@ -57,7 +57,7 @@ inline bool imply(bool lhs, bool rhs);
  *
  * @return - bool, true only if both lhs and rhs are true or false else false
  */
-inline bool equal(bool lhs, bool rhs);
+bool equal(bool lhs, bool rhs);
 
 
 /**
@@ -67,7 +67,8 @@ inline bool equal(bool lhs, bool rhs);
  *
  * @return - rel_priority, the priority of corresponding operator, otherwise UNKNOWN
  */
-inline rel_priority priority(const char opr);
+rel_priority priority(const char opr);
 
-#endif /* end of include guard: _RELATION_H_ */
+bool is_operator(const char opr);
+
 #endif /* end of include guard: _RELATION_H_ */
