@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include "rela.h"
 
 /**
@@ -102,3 +103,8 @@ bool is_operator(const char opr)
         || opr == ')';
 }
 
+
+bool is_element(const char elem)
+{
+    return isupper(elem);
+}

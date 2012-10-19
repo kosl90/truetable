@@ -44,5 +44,7 @@ int main(void)
     // ABv!CDE>#^
     tests("!(AvB)^(C#D>E)");
 
+    bdestroy(test);
+
     return 0;
 }

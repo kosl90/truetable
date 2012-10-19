@@ -53,7 +53,7 @@ void stack_pop(Stack stk)
 
 STACK_TYPE stack_top(Stack stk)
 {
-    assert(!stack_is_empty(stk));
+    /*assert(!stack_is_empty(stk));*/
     return stk->head->value;
 }
 

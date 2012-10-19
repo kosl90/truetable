@@ -4,8 +4,8 @@
 #include <stdbool.h>
 
 typedef enum {
-    UNKNOWN, NOT, CONJUNCTION, DISJUNCTION,
-    IMPLICATION, EQUALITY
+    UNKNOWN, EQUALITY, IMPLICATION, DISJUNCTION,
+    CONJUNCTION, NOT
 } rel_priority;
 
 
@@ -13,7 +13,6 @@ typedef enum {
  * @brief not - return not element
  *
  * @param e - bool, the truth value of element
- *
  * @return - bool, false if e is true else true
  */
 bool not(bool e);
@@ -70,5 +69,7 @@ bool equal(bool lhs, bool rhs);
 rel_priority priority(const char opr);
 
 bool is_operator(const char opr);
+
+bool is_element(const char elem);
 
 #endif /* end of include guard: _RELATION_H_ */
