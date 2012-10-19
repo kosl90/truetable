@@ -5,6 +5,55 @@
 #include "bstrlib.h"
 #include "dbg.h"
 
+bstring remove_space(bstring expr)
+{
+    bstring backup = bstrcpy(expr);
+    char c;
+    size_t idx;
+
+    btrunc(expr, 0);
+
+    for (idx = 0; (c = bchar(backup, idx)) != '\0'; ++idx) {
+        if (!isspace(c)) {
+            bconchar(expr, c);
+        }
+    }
+
+    return expr;
+}
+
+bool is_valid_expression(const_bstring expr)
+{
+    char last = '!';
+    char c;
+    size_t idx;
+    int bn = 0;
+
+    for (idx = 0; (c = bchar(expr, idx)); ++idx) {
+        if (c == '(') {
+            bn++;
+        } else if (c == ')') {
+            bn--;
+        }
+
+        if (is_element(c) && (is_operator(last) || last == '(')
+                || c == '(' && (is_operator(last) || last == '(')
+                || c == ')' && (is_element(last) || last == ')')
+                || c == '!' && (is_operator(last))
+                || is_operator(c) && (is_element(last))) {
+            last = c;
+        } else {
+            return false;
+        }
+    }
+
+    if (bn != 0) {
+        return false;
+    }
+
+    return true;
+}
+
 bstring infix2suffix(const_bstring expr)
 {
     bstring suffix = bfromcstr("");
@@ -32,7 +81,7 @@ bstring infix2suffix(const_bstring expr)
              * is greater than or equal to the priority of current operator,
              * pop the top element and push it back to suffix expression.
              * **NOTE**:
-             * NOT is unary operator, it differs from other operators, NOT
+             * NOT is an unary operator, it differs from other operators, NOT
              * mustn't pop from stack.
              */
             while (!stack_is_empty(stk) && pri != NOT && priority(stack_top(stk)) >= pri) {
