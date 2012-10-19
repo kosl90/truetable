@@ -38,7 +38,7 @@
 
 struct expr_info {
     int element_num;
-    bool val[26];
+    bool element[26];
 };
 
 #endif /* end of include guard: _MAIN_H_ */

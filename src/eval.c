@@ -1,9 +1,28 @@
 #include <ctype.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include "main.h"
 #include "eval.h"
 #include "rela.h"
 #include "stack.h"
 #include "bstrlib.h"
 #include "dbg.h"
+
+static bool not_warp(bool dummy, bool val)
+{
+    return not(val);
+}
+
+typedef bool (*funcp)(bool, bool);
+
+static funcp rela_func[] = {
+    NULL,
+    equal,
+    imply,
+    or,
+    and,
+    not_warp
+};
 
 bstring remove_space(bstring expr)
 {
@@ -54,6 +73,25 @@ bool is_valid_expression(const_bstring expr)
     return true;
 }
 
+struct expr_info* parse(const_bstring expr)
+{
+    int idx;
+    char c;
+    struct expr_info* info = NULL;
+    info = calloc(1, sizeof(struct expr_info));
+    check_mem(info);
+
+    for (idx = 0; (c = bchar(expr, idx)) != '\0'; ++idx) {
+        if (is_element(c) && !info->element[c - 'A']) {
+            info->element[c - 'A'] = true;
+            info->element_num++;
+        }
+    }
+
+error:
+    return info;
+}
+
 bstring infix2suffix(const_bstring expr)
 {
     bstring suffix = bfromcstr("");
@@ -101,5 +139,63 @@ bstring infix2suffix(const_bstring expr)
     stack_destroy(stk);
 
     return suffix;
+}
+
+void dec2bin(size_t num, char* bin)
+{
+    int i = 0;
+
+    do {
+        bin[i++] = num % 2;
+        num /= 2;
+    } while (num != 0);
+}
+
+int eval(const_bstring expr, const bool* val, const struct expr_info* info)
+{
+    Stack stk = stack_create();
+
+    bool elem_val[26] = {false};
+    bool result;
+    size_t idx;
+    size_t i;
+    char c;
+
+    for (i = info->element_num, idx = 0; i != 0 && idx < 26; ++idx) {
+        if (info->element[idx]) {
+            elem_val[idx] = val[--i];
+        }
+    }
+
+#if 0
+    for (idx = 0; i < 26; ++i) {
+        printf("%d", elem_val[idx]);
+    }
+
+    printf("\n");
+#endif
+
+    for (idx = 0; (c = bchar(expr, idx)) != '\0'; ++idx) {
+        if (is_element(c)) {
+            stack_push(stk, elem_val[c - 'A']);
+        } else {
+            bool rhs = stack_top(stk);
+            stack_pop(stk);
+            bool lhs = false;
+            rel_priority pri = priority(c);
+
+            if (pri != NOT) {
+                lhs = stack_top(stk);
+                stack_pop(stk);
+            }
+
+            result = rela_func[pri](lhs, rhs);
+            stack_push(stk, result);
+        }
+    }
+
+    stack_destroy(stk);
+
+    return result;
 }
 
