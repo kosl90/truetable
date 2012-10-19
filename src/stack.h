@@ -19,6 +19,8 @@ typedef struct Stack {
  */
 Stack stack_create();
 
+int stack_size(Stack stk);
+
 /*
 ** stack_is_empty
 ** 如果堆栈为空，返回TRUE，否则返回FALSE

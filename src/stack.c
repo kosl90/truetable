@@ -14,6 +14,11 @@ error:
     return stk;
 }
 
+int stack_size(Stack stk)
+{
+    return stk->size;
+}
+
 
 int stack_is_empty(Stack stk)
 {
@@ -22,7 +27,7 @@ int stack_is_empty(Stack stk)
 
 void stack_push(Stack stk, STACK_TYPE value)
 {
-    StackNode* new_node = (stkNode*)malloc(sizeof(StackNode));
+    StackNode* new_node = (StackNode*)malloc(sizeof(StackNode));
     check_mem(new_node);
 
     new_node->value = value;
@@ -38,7 +43,7 @@ error:
 void stack_pop(Stack stk)
 {
     StackNode* first;
-    assert(!is_empty(stk));
+    assert(!stack_is_empty(stk));
     first = stk->head;
     stk->head = first->next;
     stk->size--;
@@ -48,15 +53,15 @@ void stack_pop(Stack stk)
 
 STACK_TYPE stack_top(Stack stk)
 {
-    assert(!is_empty(stk));
+    assert(!stack_is_empty(stk));
     return stk->head->value;
 }
 
 
 void stack_destroy(Stack stk)
 {
-    while (!is_empty(stk)) {
-        pop(stk);
+    while (!stack_is_empty(stk)) {
+        stack_pop(stk);
     }
 
     free(stk);
