@@ -3,60 +3,61 @@
 #include <stdlib.h>
 #include <malloc.h>
 #include "stack.h"
+#include "dbg.h"
 
-/*
-** is_empty
-** 如果堆栈为空，返回TRUE，否则返回FALSE
-*/
-int is_empty(StackNode* stack)
+Stack stack_create()
 {
-    return stack == NULL;
+    Stack stk = (Stack)calloc(1, sizeof(struct Stack));
+    check_mem(stk);
+
+error:
+    return stk;
 }
 
-/*
-** push
-** 把一个新值压到堆栈中。它的参数是需要被压入的值。
-*/
-void push(StackNode** stackp, STACK_TYPE value)
+
+int stack_is_empty(Stack stk)
 {
-    StackNode* new_node;
-    new_node = (StackNode*)malloc(sizeof(StackNode));
-    assert(new_node != NULL);
+    return stk->head == NULL;
+}
+
+void stack_push(Stack stk, STACK_TYPE value)
+{
+    StackNode* new_node = (stkNode*)malloc(sizeof(StackNode));
+    check_mem(new_node);
+
     new_node->value = value;
-    new_node->next = *stackp;
-    *stackp = new_node;
+    new_node->next = stk->head;
+    stk->head = new_node;
+    stk->size++;
+
+error:
+    return;
 }
 
-/*
-** pop
-** 从堆栈中弹出一个值，并将其丢弃。
-*/
-void pop(StackNode** stackp)
+
+void stack_pop(Stack stk)
 {
     StackNode* first;
-    assert(!is_empty(*stackp));
-    first = *stackp;
-    *stackp = first->next;
+    assert(!is_empty(stk));
+    first = stk->head;
+    stk->head = first->next;
+    stk->size--;
     free(first);
 }
 
-/*
-** top
-** 返回堆栈顶部元素的值，但不对堆栈进行修改。
-*/
-STACK_TYPE top(StackNode* stack)
+
+STACK_TYPE stack_top(Stack stk)
 {
-    assert(!is_empty(stack));
-    return stack->value;
+    assert(!is_empty(stk));
+    return stk->head->value;
 }
 
-/*
-** destroy_stack
-** 销毁堆栈
-*/
-void destroy_stack(StackNode** stackp)
+
+void stack_destroy(Stack stk)
 {
-    while (!is_empty(*stackp)) {
-        pop(stackp);
+    while (!is_empty(stk)) {
+        pop(stk);
     }
+
+    free(stk);
 }
