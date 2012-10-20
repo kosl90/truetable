@@ -36,9 +36,11 @@
 "NOTE:\n" \
 "\tif no option is given, program will read expression from standard input.\n\n" \
 
-struct expr_info {
-    int element_num;
+typedef struct expr_info {
+    size_t expr_len;
+    size_t element_num;
+    size_t cond_num;
     bool element[26];
-};
+} ExprInfo;
 
 #endif /* end of include guard: _MAIN_H_ */

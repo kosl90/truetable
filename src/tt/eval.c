@@ -39,6 +39,8 @@ bstring remove_space(bstring expr)
         }
     }
 
+    bdestroy(backup);
+
     return expr;
 }
 
@@ -56,11 +58,11 @@ bool is_valid_expression(const_bstring expr)
             bn--;
         }
 
-        if (is_element(c) && (is_operator(last) || last == '(')
-                || c == '(' && (is_operator(last) || last == '(')
-                || c == ')' && (is_element(last) || last == ')')
-                || c == '!' && (is_operator(last))
-                || is_operator(c) && (is_element(last))) {
+        if ((is_element(c) && (is_operator(last) || last == '('))
+                || (c == '(' && (is_operator(last) || last == '('))
+                || (c == ')' && (is_element(last) || last == ')'))
+                || (c == '!' && (is_operator(last)))
+                || (is_operator(c) && (is_element(last)))) {
             last = c;
         } else {
             return false;
@@ -74,12 +76,12 @@ bool is_valid_expression(const_bstring expr)
     return true;
 }
 
-struct expr_info* parse(const_bstring expr)
+ExprInfo* parse(const_bstring expr)
 {
     int idx;
     char c;
-    struct expr_info* info = NULL;
-    info = calloc(1, sizeof(struct expr_info));
+    ExprInfo* info = NULL;
+    info = calloc(1, sizeof(ExprInfo));
     check_mem(info);
 
     for (idx = 0; (c = bchar(expr, idx)) != '\0'; ++idx) {
@@ -87,7 +89,11 @@ struct expr_info* parse(const_bstring expr)
             info->element[c - 'A'] = true;
             info->element_num++;
         }
+
+        info->expr_len++;
     }
+
+    info->cond_num = pow(2, info->element_num);
 
 error:
     return info;
@@ -142,17 +148,16 @@ bstring infix2suffix(const_bstring expr)
     return suffix;
 }
 
-void dec2bin(size_t num, int* bin)
+void dec2bin(size_t num, bool* bin, size_t bits_num)
 {
-    int i = 0;
 
     do {
-        bin[i++] = num % 2;
+        bin[--bits_num] = num % 2;
         num /= 2;
     } while (num != 0);
 }
 
-int eval(const_bstring expr, const bool* val, const struct expr_info* info)
+int eval(const_bstring suffix_expr, const bool* val, const ExprInfo* info)
 {
     Stack stk = stack_create();
 
@@ -162,13 +167,13 @@ int eval(const_bstring expr, const bool* val, const struct expr_info* info)
     size_t i;
     char c;
 
-    for (i = info->element_num, idx = 0; i != 0 && idx < 26; ++idx) {
+    for (i = 0, idx = 0; i < info->element_num && idx < 26; ++idx) {
         if (info->element[idx]) {
-            elem_val[idx] = val[--i];
+            elem_val[idx] = val[i++];
         }
     }
 
-    for (idx = 0; (c = bchar(expr, idx)) != '\0'; ++idx) {
+    for (idx = 0; (c = bchar(suffix_expr, idx)) != '\0'; ++idx) {
         if (is_element(c)) {
             stack_push(stk, elem_val[c - 'A']);
         } else {
@@ -187,16 +192,17 @@ int eval(const_bstring expr, const bool* val, const struct expr_info* info)
         }
     }
 
+    result = stack_top(stk);
     stack_destroy(stk);
 
     return result;
 }
 
-void print_head(const_bstring expr, const struct expr_info* info)
+void print_head(const_bstring expr, const ExprInfo* info)
 {
-    int i;
+    size_t i;
 
-    for (i = 0; i < info->element_num; ++i) {
+    for (i = 0; i < 26; ++i) {
         if (info->element[i]) {
             printf("%c ", i + 'A');
         }
@@ -205,23 +211,32 @@ void print_head(const_bstring expr, const struct expr_info* info)
     printf("%s\n", bdata(expr));
 }
 
-void print_body(const_bstring expr, const struct expr_info* info)
-{
-    int i;
-    int total = pow(2, info->element_num);
 
-    for (i = 0; i < total; ++i) {
-        for (i = info->element_num - 1; i >= 0; --i) {
-            printf("%d ", info->element[i]);
+void print_table(const_bstring expr)
+{
+    size_t i, j;
+    int space_width;
+    bstring suffix_expr = infix2suffix(expr);
+
+    ExprInfo* info = parse(expr);
+    space_width = info->expr_len / 2;
+
+    print_head(expr, info);
+
+    for (i = 0; i < info->cond_num; ++i) {
+        bool val[26] = {false};
+        dec2bin(i, val, info->element_num);
+
+        // print each line
+        for (j = 0; j < info->element_num; ++j) {
+            printf("%d ", val[j]);
         }
 
-        /*printf("", eval(expr));*/
+        printf("%*s%d\n", space_width, "", eval(suffix_expr, val, info));
     }
-}
 
-void print_table(const_bstring expr, const struct expr_info* info)
-{
-    print_head(expr, info);
-    /*print_body();*/
+    // free resources
+    free(info);
+    info = NULL;
 }
 

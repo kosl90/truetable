@@ -13,7 +13,7 @@ OBJECTS=$(patsubst %.c, %.o, $(SOURCES))
 TESTS_SOURCES=$(wildcard tests/*.c)
 TESTS=$(patsubst %.c, %.exe, $(TESTS_SOURCES))
 
-all: $(TARGET)
+all: $(TARGET) main $(TESTS)
 
 main: src/main.c
 	$(CC) $(CFLAGS) -o $(BIN)/main.exe src/main.c -Lbuild -ltt -lm

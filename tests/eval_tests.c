@@ -21,9 +21,13 @@ void test(const char* str)
     struct expr_info* info = parse(expr);
 
     for (i = 0; i < pow(2, info->element_num); ++i) {
-        char val[26] = {0};
-        dec2bin(i, val);
-        printf("%d", eval(suf_expr, val, info));
+        bool val[26] = {0};
+        size_t j;
+        dec2bin(i, val, info->element_num);
+        for (j = 0; j < info->element_num; ++j) {
+            printf("%d", val[j]);
+        }
+        printf(":%d ", eval(suf_expr, val, info));
     }
     printf("\n");
 
@@ -32,10 +36,11 @@ void test(const char* str)
 
 int main(void)
 {
-    test("!A");
+    test("A"); //01
+    test("!A"); //10
     test("A^B");//0001
     test("AvB");//0111
-    test(">B");//1101
+    test("A>B");//1101
     test("A#B");//1001
     test("C#A^B");//1001
 

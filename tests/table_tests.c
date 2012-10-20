@@ -6,7 +6,6 @@ void test(const char* cexpr)
 {
     bstring expr = bfromcstr(cexpr);
     struct expr_info* info = parse(remove_space(expr));
-    const_bstring suf = infix2suffix(expr);
     print_head(expr, info);
     free(info);
 }
