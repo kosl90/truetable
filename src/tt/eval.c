@@ -204,7 +204,7 @@ void print_head(const_bstring expr, const ExprInfo* info)
 
     for (i = 0; i < 26; ++i) {
         if (info->element[i]) {
-            printf("%c ", i + 'A');
+            printf("%c  ", i + 'A');
         }
     }
 
@@ -229,7 +229,7 @@ void print_table(const_bstring expr)
 
         // print each line
         for (j = 0; j < info->element_num; ++j) {
-            printf("%d ", val[j]);
+            printf("%d  ", val[j]);
         }
 
         printf("%*s%d\n", space_width, "", eval(suffix_expr, val, info));

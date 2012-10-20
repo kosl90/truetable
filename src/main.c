@@ -30,6 +30,11 @@ int main(int argc, char* argv[])
             }
 
             print_table(expr);
+
+            if (argc != 1 + i) {
+                printf("\n");  // table separator
+            }
+
             bdestroy(expr);
         }
     } else if (strcmp(argv[1], "-f") == 0) {
