@@ -1,6 +1,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <math.h>
 #include "main.h"
 #include "eval.h"
 #include "rela.h"
@@ -167,14 +168,6 @@ int eval(const_bstring expr, const bool* val, const struct expr_info* info)
         }
     }
 
-#if 0
-    for (idx = 0; i < 26; ++i) {
-        printf("%d", elem_val[idx]);
-    }
-
-    printf("\n");
-#endif
-
     for (idx = 0; (c = bchar(expr, idx)) != '\0'; ++idx) {
         if (is_element(c)) {
             stack_push(stk, elem_val[c - 'A']);
@@ -198,4 +191,38 @@ int eval(const_bstring expr, const bool* val, const struct expr_info* info)
 
     return result;
 }
+
+void print_head(const_bstring expr, const struct expr_info* info)
+{
+    int i;
+
+    for (i = 0; i < info->element_num; ++i) {
+        if (info->element[i]) {
+            printf("%c ", i + 'A');
+        }
+    }
+
+    printf("%s\n", bdata(expr));
+}
+
+void print_body(const_bstring expr, const struct expr_info* info)
+{
+    int i;
+    int total = pow(2, info->element_num);
+
+    for (i = 0; i < total; ++i) {
+        for (i = info->element_num - 1; i >= 0; --i) {
+            printf("%d ", info->element[i]);
+        }
+
+        printf("", eval(expr));
+    }
+}
+
+void print_table(const_bstring expr, const struct expr_info* info)
+{
+    print_head(expr, info);
+    print_body();
+}
+
 

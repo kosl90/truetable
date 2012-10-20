@@ -1,12 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-
 #include "main.h"
 #include "bstrlib.h"
-
-bool is_valid(const bstring);
-void print(const bstring, );
 
 int main(int argc, char* argv[])
 {
