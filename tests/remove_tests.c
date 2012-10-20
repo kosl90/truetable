@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../src/eval.h"
+#include <eval.h>
 
 int main(void)
 {

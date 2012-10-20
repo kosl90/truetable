@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../src/main.h"
-#include "../src/eval.h"
+#include <main.h>
+#include <eval.h>
 
 int main(void)
 {

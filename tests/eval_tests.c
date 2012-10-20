@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
-#include "../src/eval.h"
+#include <main.h>
+#include <eval.h>
 
 void test(const char* str)
 {
@@ -20,8 +21,7 @@ void test(const char* str)
     struct expr_info* info = parse(expr);
 
     for (i = 0; i < pow(2, info->element_num); ++i) {
-        bool val[26] = {0};
-        int j;
+        char val[26] = {0};
         dec2bin(i, val);
         printf("%d", eval(suf_expr, val, info));
     }
@@ -35,7 +35,7 @@ int main(void)
     test("!A");
     test("A^B");//0001
     test("AvB");//0111
-    test("A>B");//1101
+    test(">B");//1101
     test("A#B");//1001
     test("C#A^B");//1001
 

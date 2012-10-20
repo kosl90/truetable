@@ -142,7 +142,7 @@ bstring infix2suffix(const_bstring expr)
     return suffix;
 }
 
-void dec2bin(size_t num, char* bin)
+void dec2bin(size_t num, int* bin)
 {
     int i = 0;
 
@@ -157,7 +157,7 @@ int eval(const_bstring expr, const bool* val, const struct expr_info* info)
     Stack stk = stack_create();
 
     bool elem_val[26] = {false};
-    bool result;
+    bool result = 0;
     size_t idx;
     size_t i;
     char c;
@@ -215,14 +215,14 @@ void print_body(const_bstring expr, const struct expr_info* info)
             printf("%d ", info->element[i]);
         }
 
-        printf("", eval(expr));
+        /*printf("", eval(expr));*/
     }
 }
 
 void print_table(const_bstring expr, const struct expr_info* info)
 {
     print_head(expr, info);
-    print_body();
+    /*print_body();*/
 }
 
 

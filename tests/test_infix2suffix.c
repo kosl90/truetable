@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <stdio.h>
-#include "../src/bstrlib.h"
-#include "../src/eval.h"
+#include <bstrlib.h>
+#include <eval.h>
 
 bstring test = NULL;
 
@@ -21,7 +21,7 @@ void tests(const char* str)
     assert(suffix->data != NULL);
 
     printf("%s\n", bdatae(suffix, "Error"));
-    /*puts((char*)(suffix->data));*/
+    /*puts((char*)(suffix>data));*/
 }
 
 int main(void)
@@ -35,14 +35,14 @@ int main(void)
     // ABv
     tests("AvB");
 
-    // AB>
-    tests("A>B");
+    // A>
+    tests(">B");
 
     // ABC^v
     tests("AvB^C");
 
-    // ABv!CDE>#^
-    tests("!(AvB)^(C#D>E)");
+    // ABv!CD>#^
+    tests("!(AvB)^(C#>E)");
 
     bdestroy(test);
 

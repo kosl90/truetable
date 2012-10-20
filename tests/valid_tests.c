@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "../src/bstrlib.h"
-#include "../src/eval.h"
+#include <bstrlib.h>
+#include <eval.h>
 
 int main(void)
 {

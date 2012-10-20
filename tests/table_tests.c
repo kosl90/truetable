@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../src/eval.h"
+#include <eval.h>
 
 void test(const char* cexpr)
 {
@@ -17,7 +17,7 @@ int main(void)
     test("A");
     test("A^B");
     test("!A^B");
-    test("A^Bv(C#D)>E");
+    test("A^Bv(C#D>E");
 
     return 0;
 }
