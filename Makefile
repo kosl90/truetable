@@ -5,6 +5,7 @@ LIBDIR=build
 LIB=tt
 INCLUDE=src/tt
 CFLAGS=-std=$(STD) -I$(INCLUDE) -Wall -Wextra -rdynamic -static -g -O2 -DNODEBUG
+BIN=bin
 
 SOURCES=$(wildcard src/tt/*.c)
 OBJECTS=$(patsubst %.c, %.o, $(SOURCES))
@@ -13,6 +14,9 @@ TESTS_SOURCES=$(wildcard tests/*.c)
 TESTS=$(patsubst %.c, %.exe, $(TESTS_SOURCES))
 
 all: $(TARGET)
+
+main: src/main.c
+	$(CC) $(CFLAGS) -o $(BIN)/main.exe src/main.c -Lbuild -ltt -lm
 
 $(TARGET): build $(OBJECTS)
 	ar rvs $@ $(OBJECTS)
@@ -25,10 +29,11 @@ build:
 .PHONY: clean distclean
 clean:
 	cd src/; rm -rf a.out *.~ *.swp *.o
-	rm -rf build/
+	cd tests/; rm -rf a.out *.exe
 
 distclean: clean
-	cd src/; rm -rf *.a
+	rm -rf build/
+	rm -rf bin/
 
 .PHONY: tests
 tests: $(TESTS)

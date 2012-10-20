@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
-#include "stack.h"
-#include "dbg.h"
+#include <stack.h>
+#include <dbg.h>
 
 Stack stack_create()
 {

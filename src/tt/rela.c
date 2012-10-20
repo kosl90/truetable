@@ -1,5 +1,5 @@
 #include <ctype.h>
-#include "rela.h"
+#include <rela.h>
 
 /**
  * @brief not - return not element

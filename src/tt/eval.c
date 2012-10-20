@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
-#include "main.h"
-#include "eval.h"
-#include "rela.h"
-#include "stack.h"
-#include "bstrlib.h"
-#include "dbg.h"
+#include <main.h>
+#include <eval.h>
+#include <rela.h>
+#include <stack.h>
+#include <bstrlib.h>
+#include <dbg.h>
 
 static bool not_warp(bool dummy, bool val)
 {
@@ -224,5 +224,4 @@ void print_table(const_bstring expr, const struct expr_info* info)
     print_head(expr, info);
     /*print_body();*/
 }
-
 

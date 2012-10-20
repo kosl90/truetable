@@ -1,8 +1,8 @@
 #ifndef _EVAL_H_
 #define _EVAL_H_
 
-#include "main.h"
-#include "bstrlib.h"
+#include <main.h>
+#include <bstrlib.h>
 
 bstring remove_space(bstring);
 
