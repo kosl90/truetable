@@ -4,3 +4,5 @@
 *.bak
 a.out
 *.gch
+bin/
+build/
