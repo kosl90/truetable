@@ -66,7 +66,7 @@ bool is_valid_expression(const_bstring expr)
                 || (c == '(' && (is_operator(last) || last == '('))
                 || (c == ')' && (is_element(last) || last == ')'))
                 || (c == '!' && (is_operator(last)))
-                || (is_operator(c) && (is_element(last)))) {
+                || (is_operator(c) && (is_element(last) || last == ')'))) {
             last = c;
         } else {
             return false;
@@ -238,6 +238,8 @@ void print_table(const_bstring expr)
 
         printf("%*s%d\n", space_width, "", eval(suffix_expr, val, info));
     }
+
+    printf("\n");  // separator between tables
 
     // free resources
     free(info);

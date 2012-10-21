@@ -3,78 +3,79 @@
 #include <string.h>
 #include <stdbool.h>
 #include <main.h>
+#include <print.h>
 #include <eval.h>
 #include <bstrlib.h>
 #include <dbg.h>
 
-void do_print(bstring expr, int count);
+typedef bstring (*Get_expr_handler)(void* param);
 
-int main(int argc, char* argv[])
+void do_print(Get_expr_handler get_expr, void* param)
 {
     bstring expr = NULL;
 
-    if (argc < 2) {
-        int count = 0;
+    while ((expr = get_expr(param)) != NULL) {
+        remove_space(expr);
 
-        while (1) {
-            if (count++ != 0) {
-                printf("\n");
-            }
-
-            printf("please enter you expression: ");
-            fflush(stdout);
-
-            if ((expr = bgets((bNgetc)fgetc, stdin, '\n')) == NULL) {
-                break;
-            }
-
-            do_print(expr, 0);
-            bdestroy(expr);
+        if (!is_valid_expression(expr)) {
+            fprintf(stderr, "Invalid Expression: %s\n\n", bdata(expr));
+            continue;
         }
-    } else if (argc < 3 || strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0) {
+
+        print_table(expr);
+        bdestroy(expr);
+    }
+}
+
+bstring get_expr_from_stdin(void* param) {
+    bstring expr = NULL;
+
+    printf("please enter you expression: ");
+    fflush(stdout);
+
+    expr = bgets((bNgetc) fgetc, param, '\n');
+
+    return expr;
+}
+
+bstring get_expr_from_argv(void* param) {
+    static int i = 2;
+    bstring expr = NULL;
+    expr = bfromcstr(((char**)param)[i++]);
+
+    return expr;
+}
+
+bstring get_expr_from_file(void* param) {
+    bstring expr = NULL;
+    expr = bgets((bNgetc) fgetc, param, '\n');
+
+    if (expr == NULL) {
+        fclose(param);
+    }
+
+    return expr;
+}
+
+int main(int argc, char* argv[])
+{
+    if (argc < 2) {
+        do_print(get_expr_from_stdin, stdin);
+    } else if (argc < 3 || strcmp(argv[1], "-h") == 0
+            || strcmp(argv[1], "--help") == 0) {
         fprintf(stderr, HELP_INFO);
     } else if (strcmp(argv[1], "-e") == 0) {
-        int i;
-
-        for (i = 2; i < argc; ++i) {
-            expr = bfromcstr(argv[i]);
-            do_print(expr, i - 2);
-            bdestroy(expr);
-        }
+        do_print(get_expr_from_argv, argv);
     } else if (strcmp(argv[1], "-f") == 0) {
         FILE* fp = fopen(argv[2], "r");
         check(fp != NULL, "%s", argv[2]);
 
-        int count = 0;
-
-        while ((expr = bgets((bNgetc)fgetc, fp, '\n')) != NULL) {
-            do_print(expr, count++);
-            bdestroy(expr);
-        }
+        do_print(get_expr_from_file, fp);
     } else if (strcmp(argv[1], "-v") == 0 || strcmp(argv[1], "--version") == 0) {
         printf("truetable.exe v%s\n", VERSION);
-    } else {
-        fprintf(stderr, "Does not know this option \"%s\", use -?/-h/--help for help\n",
-                argv[1]);
     }
 
 error:
     return 0;
 }
 
-void do_print(bstring expr, int count)
-{
-    remove_space(expr);
-
-    if (count != 0) {
-        printf("\n");  // table separator
-    }
-
-    if (!is_valid_expression(expr)) {
-        fprintf(stderr, "Invalid Expression: %s\n", bdata(expr));
-        return;
-    }
-
-    print_table(expr);
-
-}
