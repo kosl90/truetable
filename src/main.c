@@ -8,8 +8,17 @@
 #include <bstrlib.h>
 #include <dbg.h>
 
+
 typedef bstring (*Get_expr_handler)(void* param);
 
+
+/**
+ * @brief do_print - A wrap for getting expression and evaluating expression and
+ *                   print the true table.
+ *
+ * @param get_expr - Get_expr_handler, a function getting expression.
+ * @param param - void*, a parameter passing to get_expr
+ */
 void do_print(Get_expr_handler get_expr, void* param)
 {
     bstring expr = NULL;
@@ -27,6 +36,7 @@ void do_print(Get_expr_handler get_expr, void* param)
     }
 }
 
+
 bstring get_expr_from_stdin(void* param) {
     bstring expr = NULL;
 
@@ -38,6 +48,7 @@ bstring get_expr_from_stdin(void* param) {
     return expr;
 }
 
+
 bstring get_expr_from_argv(void* param) {
     static int i = 2;
     bstring expr = NULL;
@@ -45,6 +56,7 @@ bstring get_expr_from_argv(void* param) {
 
     return expr;
 }
+
 
 bstring get_expr_from_file(void* param) {
     bstring expr = NULL;
@@ -57,9 +69,11 @@ bstring get_expr_from_file(void* param) {
     return expr;
 }
 
+
 int main(int argc, char* argv[])
 {
     if (argc < 2) {
+        // no option is given, get expression from stdin.
         do_print(get_expr_from_stdin, stdin);
     } else if (argc < 3 || strcmp(argv[1], "-h") == 0
             || strcmp(argv[1], "--help") == 0) {
@@ -73,6 +87,9 @@ int main(int argc, char* argv[])
         do_print(get_expr_from_file, fp);
     } else if (strcmp(argv[1], "-v") == 0 || strcmp(argv[1], "--version") == 0) {
         printf("truetable.exe v%s\n", VERSION);
+    } else {
+        fprintf(stderr, "Unknow option: %s\n", argv[1]);
+        fprintf(stderr, HELP_INFO);
     }
 
 error:

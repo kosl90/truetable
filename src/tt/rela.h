@@ -68,8 +68,25 @@ bool equal(bool lhs, bool rhs);
  */
 rel_priority priority(const char opr);
 
+
+/**
+ * @brief is_operator - judge wheter a character is a valid operator.
+ *
+ * @param opr - const char, character to be judged.
+ *
+ * @return - bool, return true if character is a valid operator, otherwise
+ *           false.
+ */
 bool is_operator(const char opr);
 
+
+/**
+ * @brief is_element - judge whether a character is a valid element.
+ *
+ * @param elem - const char, character to be judged.
+ *
+ * @return - bool, return true if character is a valid element, otherwise false.
+ */
 bool is_element(const char elem);
 
 #endif /* end of include guard: _RELATION_H_ */

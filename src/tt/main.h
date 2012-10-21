@@ -21,17 +21,17 @@
 "\t`A-Z`: element\n" \
 "\n" \
 "OPTIONS\n" \
-"-?|-h|--help\n" \
-"\tprint help message.\n" \
+"\t-?|-h|--help\n" \
+"\t\tprint help message.\n" \
 "\n" \
-"-v|--version\n" \
-"\tprint version\n" \
+"\t-v|--version\n" \
+"\t\tprint version\n" \
 "\n" \
-"-e expression\n" \
-"\tprint true table accoriding each expresion.\n" \
+"\t-e expression\n" \
+"\t\tprint true table accoriding each expresion.\n" \
 "\n" \
-"-f FILE\n" \
-"\tread FILE, each line is an expression, then print all true tables.\n" \
+"\t-f FILE\n" \
+"\t\tread FILE, each line is an expression, then print all true tables.\n" \
 "\n" \
 "NOTE:\n" \
 "\tif no option is given, program will read expression from standard input.\n\n" \

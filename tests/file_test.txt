@@ -5,4 +5,4 @@ A>C
 A#F
 !D
 d
-!A#B^C
+!(A#B)^C

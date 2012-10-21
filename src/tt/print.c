@@ -6,6 +6,7 @@
 #include <eval.h>
 #include <bstrlib.h>
 
+
 void print_head(const_bstring expr, const ExprInfo* info)
 {
     size_t i;
@@ -35,7 +36,7 @@ void print_table(const_bstring expr)
         bool val[26] = {false};
         dec2bin(i, val, info->element_num);
 
-        // print each line
+        // print one line
         for (j = 0; j < info->element_num; ++j) {
             printf("%d  ", val[j]);
         }
@@ -45,7 +46,6 @@ void print_table(const_bstring expr)
 
     printf("\n");  // separator between tables
 
-    // free resources
     free(info);
     info = NULL;
 }

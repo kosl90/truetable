@@ -9,12 +9,15 @@
 #include <bstrlib.h>
 #include <dbg.h>
 
+
 static bool not_warp(bool dummy, bool val)
 {
     return not(val);
 }
 
+
 typedef bool (*funcp)(bool, bool);
+
 
 static funcp rela_func[] = {
     NULL,
@@ -24,6 +27,7 @@ static funcp rela_func[] = {
     and,
     not_warp
 };
+
 
 bstring remove_space(bstring expr)
 {
@@ -44,12 +48,13 @@ bstring remove_space(bstring expr)
     return expr;
 }
 
+
 bool is_valid_expression(const_bstring expr)
 {
     char last = '!';
     char c;
     size_t idx;
-    int bn = 0;
+    int bn = 0;  // count '(' and ')', if bn is 0, matched
 
     if (blength(expr) == 0) {
         return false;
@@ -80,6 +85,7 @@ bool is_valid_expression(const_bstring expr)
     return true;
 }
 
+
 ExprInfo* parse(const_bstring expr)
 {
     int idx;
@@ -102,6 +108,7 @@ ExprInfo* parse(const_bstring expr)
 error:
     return info;
 }
+
 
 bstring infix2suffix(const_bstring expr)
 {
@@ -152,14 +159,16 @@ bstring infix2suffix(const_bstring expr)
     return suffix;
 }
 
-void dec2bin(size_t num, bool* bin, size_t bits_num)
+
+void dec2bin(size_t num, bool* bin, int bits_num)
 {
 
     do {
-        bin[--bits_num] = num % 2;
+        bin[--bits_num] = (bool)(num % 2);
         num /= 2;
-    } while (num != 0);
+    } while (num != (size_t)0 && bits_num >= 0);
 }
+
 
 int eval(const_bstring suffix_expr, const bool* val, const ExprInfo* info)
 {
@@ -200,49 +209,5 @@ int eval(const_bstring suffix_expr, const bool* val, const ExprInfo* info)
     stack_destroy(stk);
 
     return result;
-}
-
-void print_head(const_bstring expr, const ExprInfo* info)
-{
-    size_t i;
-
-    for (i = 0; i < 26; ++i) {
-        if (info->element[i]) {
-            printf("%c  ", i + 'A');
-        }
-    }
-
-    printf("%s\n", bdata(expr));
-}
-
-
-void print_table(const_bstring expr)
-{
-    size_t i, j;
-    int space_width;
-    bstring suffix_expr = infix2suffix(expr);
-
-    ExprInfo* info = parse(expr);
-    space_width = info->expr_len / 2;
-
-    print_head(expr, info);
-
-    for (i = 0; i < info->cond_num; ++i) {
-        bool val[26] = {false};
-        dec2bin(i, val, info->element_num);
-
-        // print each line
-        for (j = 0; j < info->element_num; ++j) {
-            printf("%d  ", val[j]);
-        }
-
-        printf("%*s%d\n", space_width, "", eval(suffix_expr, val, info));
-    }
-
-    printf("\n");  // separator between tables
-
-    // free resources
-    free(info);
-    info = NULL;
 }
 
