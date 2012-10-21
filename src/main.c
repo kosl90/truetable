@@ -8,57 +8,46 @@
 #include <dbg.h>
 
 void do_print(bstring expr, int count);
+
 int main(int argc, char* argv[])
 {
-    if (argc == 1) {
-        printf("please enter you expression: ");
-        fflush(stdout);
-    }
+    bstring expr = NULL;
 
-    if (argc < 3 || strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0) {
+    if (argc < 2) {
+        int count = 0;
+
+        while (1) {
+            if (count++ != 0) {
+                printf("\n");
+            }
+
+            printf("please enter you expression: ");
+            fflush(stdout);
+
+            if ((expr = bgets((bNgetc)fgetc, stdin, '\n')) == NULL) {
+                break;
+            }
+
+            do_print(expr, 0);
+            bdestroy(expr);
+        }
+    } else if (argc < 3 || strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0) {
         fprintf(stderr, HELP_INFO);
     } else if (strcmp(argv[1], "-e") == 0) {
-        bstring expr = NULL;
         int i;
 
         for (i = 2; i < argc; ++i) {
             expr = bfromcstr(argv[i]);
             do_print(expr, i - 2);
-            /*remove_space(expr);*/
-
-            /*if (!is_valid_expression(expr)) {*/
-                /*fprintf(stderr, "Invalid Expression\n");*/
-                /*return 1;*/
-            /*}*/
-
-            /*print_table(expr);*/
-
-            /*if (argc != 1 + i) {*/
-                /*printf("\n");  // table separator*/
-            /*}*/
-
             bdestroy(expr);
         }
     } else if (strcmp(argv[1], "-f") == 0) {
         FILE* fp = fopen(argv[2], "r");
         check(fp != NULL, "%s", argv[2]);
 
-        bstring expr = NULL;
         int count = 0;
+
         while ((expr = bgets((bNgetc)fgetc, fp, '\n')) != NULL) {
-            /*remove_space(expr);*/
-
-            /*if (!is_valid_expression(expr)) {*/
-                /*fprintf(stderr, "Invalid Expression\n");*/
-                /*return 1;*/
-            /*}*/
-
-            /*print_table(expr);*/
-
-            /*if (argc != 1 + i) {*/
-                /*printf("\n");  // table separator*/
-            /*}*/
-
             do_print(expr, count++);
             bdestroy(expr);
         }
@@ -81,7 +70,6 @@ void do_print(bstring expr, int count)
         printf("\n");  // table separator
     }
 
-    /*check(is_valid_expression(expr), "Invalid Expression: %s", bdata(expr));*/
     if (!is_valid_expression(expr)) {
         fprintf(stderr, "Invalid Expression: %s\n", bdata(expr));
         return;
@@ -89,5 +77,4 @@ void do_print(bstring expr, int count)
 
     print_table(expr);
 
-/*error:*/
 }
