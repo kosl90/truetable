@@ -1,0 +1,7 @@
+A
+A^B
+AvB
+A>C
+A#F
+!D
+d

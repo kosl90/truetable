@@ -51,6 +51,10 @@ bool is_valid_expression(const_bstring expr)
     size_t idx;
     int bn = 0;
 
+    if (blength(expr) == 0) {
+        return false;
+    }
+
     for (idx = 0; (c = bchar(expr, idx)); ++idx) {
         if (c == '(') {
             bn++;

@@ -7,6 +7,7 @@
 #include <bstrlib.h>
 #include <dbg.h>
 
+void do_print(bstring expr, int count);
 int main(int argc, char* argv[])
 {
     if (argc == 1) {
@@ -22,23 +23,45 @@ int main(int argc, char* argv[])
 
         for (i = 2; i < argc; ++i) {
             expr = bfromcstr(argv[i]);
-            remove_space(expr);
+            do_print(expr, i - 2);
+            /*remove_space(expr);*/
 
-            if (!is_valid_expression(expr)) {
-                fprintf(stderr, "Invalid Expression\n");
-                return 1;
-            }
+            /*if (!is_valid_expression(expr)) {*/
+                /*fprintf(stderr, "Invalid Expression\n");*/
+                /*return 1;*/
+            /*}*/
 
-            print_table(expr);
+            /*print_table(expr);*/
 
-            if (argc != 1 + i) {
-                printf("\n");  // table separator
-            }
+            /*if (argc != 1 + i) {*/
+                /*printf("\n");  // table separator*/
+            /*}*/
 
             bdestroy(expr);
         }
     } else if (strcmp(argv[1], "-f") == 0) {
+        FILE* fp = fopen(argv[2], "r");
+        check(fp != NULL, "%s", argv[2]);
 
+        bstring expr = NULL;
+        int count = 0;
+        while ((expr = bgets((bNgetc)fgetc, fp, '\n')) != NULL) {
+            /*remove_space(expr);*/
+
+            /*if (!is_valid_expression(expr)) {*/
+                /*fprintf(stderr, "Invalid Expression\n");*/
+                /*return 1;*/
+            /*}*/
+
+            /*print_table(expr);*/
+
+            /*if (argc != 1 + i) {*/
+                /*printf("\n");  // table separator*/
+            /*}*/
+
+            do_print(expr, count++);
+            bdestroy(expr);
+        }
     } else if (strcmp(argv[1], "-v") == 0 || strcmp(argv[1], "--version") == 0) {
         printf("truetable.exe v%s\n", VERSION);
     } else {
@@ -46,6 +69,25 @@ int main(int argc, char* argv[])
                 argv[1]);
     }
 
+error:
     return 0;
 }
 
+void do_print(bstring expr, int count)
+{
+    remove_space(expr);
+
+    if (count != 0) {
+        printf("\n");  // table separator
+    }
+
+    /*check(is_valid_expression(expr), "Invalid Expression: %s", bdata(expr));*/
+    if (!is_valid_expression(expr)) {
+        fprintf(stderr, "Invalid Expression: %s\n", bdata(expr));
+        return;
+    }
+
+    print_table(expr);
+
+/*error:*/
+}
