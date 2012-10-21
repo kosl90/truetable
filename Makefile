@@ -28,7 +28,7 @@ build:
 
 .PHONY: clean distclean
 clean:
-	cd src/; rm -rf a.out *.~ *.swp *.o
+	cd src/tt; rm -rf a.out *.~ *.swp *.o
 	cd tests/; rm -rf a.out *.exe
 
 distclean: clean
