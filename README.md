@@ -1,6 +1,6 @@
 # Usage
-truetable [ -e expression | -f FILE ]
-truetable -?|-h|--help
+truetable [ -e expression | -f FILE ]<br />
+truetable -h|--help<br />
 truetable -v|--version
 
 # Description
@@ -16,15 +16,19 @@ This is a program which prints true table according to the given expression.
 
 # Options
 -h|--help
+
     print help message.
 
 -v|--version
+
     print version
 
 -e expression
+
     print true table accoriding each expresion.
 
 -f FILE
+
     read FILE, each line is an expression, then print all true tables.
 
 **NOTE**:
